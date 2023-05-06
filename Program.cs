@@ -27,8 +27,8 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(t => t
         .ForJob(jobkey.Name)
         .WithIdentity($"{jobkey.Name}.Trigger")
-        .StartNow()
-        //.WithCronSchedule("0/30 * * * * ? *")
+        //.StartNow()
+        .WithCronSchedule("0/30 * * * * ? *")
         ) ;
 
 });
