@@ -152,7 +152,7 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
                 if (text.Count == 2)
                 {
                     Console.WriteLine($"讀取網站中...");
-                    await page.GoToAsync($"{text[1]}",{ waitUntil: 'networkidle2'});
+                    await page.GoToAsync($"{text[1]}");
                     Console.WriteLine($"存取圖片中...");
                     sentMessage = await botClient.SendPhotoAsync(
                     chatId: chatId,
@@ -163,14 +163,6 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
             }
 
         }
-    }
-    catch (ApiRequestException ex)
-    {
-        Console.WriteLine(ex.Message);
-        sentMessage = await botClient.SendTextMessageAsync(
-                chatId: chatId,
-                text: $"錯誤：{ex.Message}",
-                cancellationToken: cancellationToken);
     }
     catch (Exception ex)
     {

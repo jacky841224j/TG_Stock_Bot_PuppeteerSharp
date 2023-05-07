@@ -1,19 +1,13 @@
-﻿using Microsoft.Playwright;
-using PuppeteerSharp;
-using Quartz;
-using System.Text;
+﻿using PuppeteerSharp;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TG_Stock_Bot
 {
-    [DisallowConcurrentExecution]
-
-    public class TGbot : IJob
+    public class TGbot 
     {
         #region 基本參數
         //Time
@@ -50,7 +44,7 @@ namespace TG_Stock_Bot
 
         #endregion
 
-        public async Task Execute(IJobExecutionContext context1)
+        public async Task Execute()
         {
             //Read time and save variables
             year = int.Parse(DateTime.UtcNow.Year.ToString());
