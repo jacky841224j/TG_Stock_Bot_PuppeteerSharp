@@ -114,8 +114,6 @@ namespace TG_Stock_Bot
                     Console.WriteLine($"Received a '{messageText}' message in chat {chatId} from user:\n" + firstName + " - " + lastName + " - " + " 5873853");
 
                     messageText = messageText.ToLower();
-                    #endregion
-
                     if (messageText == "/start" || messageText == "hello")
                     {
                         // Echo received message text
@@ -129,50 +127,40 @@ namespace TG_Stock_Bot
                         var text = messageText.Split().ToList();
                         int.TryParse(text[1], out StockNumber);
                         //if (!int.TryParse(text[1], out StockNumber)) return;
-                        
-                        #region 建立瀏覽器
 
+                        #endregion
+
+                        #region 建立瀏覽器
                         await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
                         var browser = await Puppeteer.LaunchAsync(new LaunchOptions
                         {
-                            //ExecutablePath = "/root/.cache/ms-playwright/chromium-1055/chrome-linux/chrome",
+                            ExecutablePath = "/usr/bin/google-chrome",
                             Args = new[] {
-                                "--disable-dev-shm-usage",
-                                "--disable-setuid-sandbox",
-                                "--no-sandbox",
-                                "--disable-gpu"
-                            },
-                            Headless = true,
+                            "--disable-dev-shm-usage",
+                            "--disable-setuid-sandbox",
+                            "--no-sandbox",
+                            "--disable-gpu" },
+                            Headless = true
                         });
                         using var page = await browser.NewPageAsync();
-                        await page.SetViewportAsync(new ViewPortOptions
-                        {
-                            Width = 1920,
-                            Height = 1080
-                        });
-
                         Console.WriteLine($"Browser is Setting");
                         #endregion
 
-                        #region 測試
                         if (messageText.Contains("/url"))
                         {
                             if (text.Count == 2)
                             {
                                 Console.WriteLine($"讀取網站中...");
-                                WaitUntilNavigation[] waitUntil = new[] { WaitUntilNavigation.Networkidle0, WaitUntilNavigation.Networkidle2, WaitUntilNavigation.DOMContentLoaded, WaitUntilNavigation.Load };
-
-                                await page.GoToAsync($"{text[1]}", 6000 ,waitUntil);
+                                await page.GoToAsync($"{text[1]}");
                                 Console.WriteLine($"存取圖片中...");
-                                Stream stream = new MemoryStream(await page.ScreenshotDataAsync());
                                 sentMessage = await botClient.SendPhotoAsync(
                                 chatId: chatId,
-                                photo: stream,
+                                photo: await page.ScreenshotStreamAsync(),
                                 parseMode: ParseMode.Html,
                                 cancellationToken: cancellationToken);
                             }
                         }
-                        #endregion
+
                     }
                 }
                 catch (ApiRequestException ex)
