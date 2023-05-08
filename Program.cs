@@ -77,14 +77,12 @@ var me = await botClient.GetMeAsync();
 Console.WriteLine($"\nHello! I'm {me.Username} and i'm your Bot!");
 
 #endregion
-
-var app = builder.Build();
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-//var url = $"http://0.0.0.0:{port}";
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+var url = $"http://0.0.0.0:{port}";
 var target = Environment.GetEnvironmentVariable("TARGET") ?? "World";
-
+var app = builder.Build();
 app.MapGet("/", () => $"Hello {target}!");
-app.Run();
+app.Run(url);
 
 async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
 {
@@ -152,7 +150,7 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
                 if (text.Count == 2)
                 {
                     Console.WriteLine($"讀取網站中...");
-                    await page.GoToAsync($"{text[1]}");
+                    await page.GoToAsync($"{text[1]}",0, new WaitUntilNavigation[] { WaitUntilNavigation.Networkidle2 });
                     Console.WriteLine($"存取圖片中...");
                     sentMessage = await botClient.SendPhotoAsync(
                     chatId: chatId,
