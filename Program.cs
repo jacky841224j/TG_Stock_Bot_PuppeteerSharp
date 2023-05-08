@@ -130,7 +130,8 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
             #endregion
 
             #region «Ø¥ßÂsÄý¾¹
-            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
+
+            //await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
             var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 ExecutablePath = "/usr/bin/google-chrome",
